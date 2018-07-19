@@ -2,7 +2,7 @@
 [![](https://img.shields.io/badge/Python-3.5,3.6-blue.svg)](https://www.python.org/)
 [![](https://img.shields.io/badge/pandas-0.23.0-brightgreen.svg)](https://pypi.python.org/pypi/pandas/0.23.0)
 [![](https://img.shields.io/badge/numpy-1.14.3-brightgreen.svg)](https://pypi.python.org/pypi/numpy/1.14.3)
-[![](https://img.shields.io/badge/keras-2.1.16-brightgreen.svg)](https://pypi.python.org/pypi/keras/2.1.16)
+[![](https://img.shields.io/badge/keras-2.1.6-brightgreen.svg)](https://pypi.python.org/pypi/keras/2.1.6)
 [![](https://img.shields.io/badge/tensorflow-1.6.0-brightgreen.svg)](https://pypi.python.org/pypi/tensorflow/1.6.0)<br>
 
 文本生成
@@ -22,17 +22,24 @@ tensorflow的代码参考了github一个比较火的项目https://github.com/yuy
 
 ### 遇到的问题
 1.keras貌似不能对标签数据在网络内部做one-hot，所以标签会非常占内存，我用服务器96G内存都吃不消30000首诗5000长度字典的生成。<br>
+<br>
 2.eras训练效果不是特别好、loss在5以上，tensorflow的loss能降到1左右。<br>
+<br>
 3.固定的网络输出是固定的。<br>
+<br>
 4.断句很难控制在5或者7。<br>
 
 ### 解决方案
 1.keras我加入了分批训练时外部执行one-hot，但会大幅增加训练时间。<br>
+<br>
 2.在预测的时候不取唯一解，而是取最大概率的n个答案，做随机抽样。<br>
+<br>
 3.由于随机抽样很容易在标点生成的时候跳过标点，我加入了修正：小于3个字符出现标点重新抽样直到字，多余7个字符不出现标点重新抽样直到标点。这里抽样也必须是最大概率的n个，而不是作弊的方式人为断句。<br>
 
 ### 其他说明
-1.网上很多代码的做法是：每次输入一个字，输出lstm的hidden用于预测下一个字、state用于保存cell状态。下一个循环输入上一轮预测的字和state作为新一轮lsrm的cell初始状态。我觉得太麻烦了，直接保留整个序列，[1] > [2] | [1,2] > [3] | [1,2,3] > [4]。因为tensorflow里面有一个output = tf.reshape(outputs, [-1,num_units])，输出的就是这句话后移一个单位预测值。<br>
+1.网上很多代码的做法是：每次输入一个字，输出lstm的hidden用于预测下一个字、state用于保存cell状态。下一个循环输入上一轮预测的字和state作为新一轮lsrm的cell初始状态。<br>
+我觉得太麻烦了，直接保留整个序列，[1] > [2] | [1,2] > [3] | [1,2,3] > [4]。因为tensorflow里面有一个output = tf.reshape(outputs, [-1,num_units])，输出的就是这句话后移一个单位预测值。<br>
+<br>
 2.训练的时候batchsize是大于1的，生成的时候batchsize=1，cell_mul.zero_state这里要注意。所以要保存训练的参数，生成的时候模型结构要修改，再导入训练参数。
 
 ### 生成的部分结果
