@@ -38,12 +38,13 @@ tensorflow的代码参考了github一个比较火的项目https://github.com/yuy
 
 ### 其他说明
 1.网上很多代码的做法是：每次输入一个字，输出lstm的hidden用于预测下一个字、state用于保存cell状态。下一个循环输入上一轮预测的字和state作为新一轮lsrm的cell初始状态。<br>
-我觉得太麻烦了，直接保留整个序列，[1] > [2] | [1,2] > [3] | [1,2,3] > [4]。因为tensorflow里面有一个output = tf.reshape(outputs, [-1,num_units])，输出的就是这句话后移一个单位预测值。<br>
+我觉得太麻烦了，直接保留整个序列，[1] > [2]  |  [1,2] > [3]  |  [1,2,3] > [4]。因为tensorflow里面有一个output = tf.reshape(outputs, [-1,num_units])，输出的就是这句话后移一个单位预测值。<br>
 <br>
 2.训练的时候batchsize是大于1的，生成的时候batchsize=1，cell_mul.zero_state这里要注意。所以要保存训练的参数，生成的时候模型结构要修改，再导入训练参数。
 
 ### 生成的部分结果
 **直接运行generate_keras.py、generate_tensorflow.py即可，在main里面修改参数**<br>
+<br>
 **Tensorflow**<br>
 ![](https://github.com/renjunxiang/generate_text/blob/master/picture/tensorflow.jpg)<br><br>
 **Tensorflow+修正**<br>
