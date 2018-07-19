@@ -9,12 +9,12 @@
 
 ## **项目介绍**
 最近生成型的网络越来越火，就试着模型写写诗歌。网上这方面的资料和现成的代码还是挺多的。不过大多都是tensorflow，少量torch，我平时keras用的多一些，就想着用keras来写一下，不过失败了...<br>
-tensorflow的代码参考了github一个比较火的项目https://github.com/yuyongsheng/tensorflow_poems，在此表示感谢！
+tensorflow的代码参考了github一个比较火的项目<https://github.com/yuyongsheng/tensorflow_poems>，在此表示感谢！
 
 ## **模块简介**
 ### 模块结构
 结构很简单，包括：<br>
-* **数据**：全唐诗，来源https://github.com/todototry/AncientChinesePoemsDB/blob/master/全唐诗crawl_from郑州大学website.zip，在此表示感谢！<br>
+* **数据**：全唐诗，来源<https://github.com/todototry/AncientChinesePoemsDB/blob/master/全唐诗crawl_from郑州大学website.zip>，在此表示感谢！<br>
 * **预处理**：data_exploration.py是个脚本，用于合并、清洗每个txt文档；Data_process.py是个方法，用于分词、编码、填充<br>
 * **网络**：在文件夹rnn中，model_keras.py、model_tensorflow.py分别是keras、tensorflow的2层lstm<br>
 * **训练**：train_keras.py、train_tensorflow.py，分别用keras、tensorflow训练网络<br>
