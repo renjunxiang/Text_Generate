@@ -8,7 +8,7 @@
 文本生成
 
 ## **项目介绍**
-最近生成型的网络越来越火，就试着模型写写诗歌。网上这方面的资料和现成的代码还是挺多的。不过大多都是tensorflow，少量torch，我平时keras用的多一些，就想着用keras来写一下，不过失败了...<br>
+最近生成型的网络越来越火，就试着模型写写诗歌。网上这方面的资料和现成的代码还是挺多的。不过大多都是tensorflow，少量torch，我平时keras用的多一些，就想着用keras来写一下，不过效果不太好...<br>
 tensorflow的代码参考了github一个比较火的项目<https://github.com/yuyongsheng/tensorflow_poems>，在此表示感谢！
 
 ## **模块简介**
@@ -23,7 +23,7 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/yu
 ### 遇到的问题
 1.keras貌似不能对标签数据在网络内部做one-hot，所以标签会非常占内存，我用服务器96G内存都吃不消30000首诗5000长度字典的生成。<br>
 <br>
-2.eras训练效果不是特别好、loss在5以上，tensorflow的loss能降到1左右。<br>
+2.同样的网络，keras训练效果不是特别好、loss在5以上，tensorflow的loss能降到1左右，不知道是不是因为没有对x和y做reshape拼接的原因。<br>
 <br>
 3.固定的网络输出是固定的。<br>
 <br>
