@@ -3,7 +3,7 @@
 [![](https://img.shields.io/badge/pandas-0.23.0-brightgreen.svg)](https://pypi.python.org/pypi/pandas/0.23.0)
 [![](https://img.shields.io/badge/numpy-1.14.3-brightgreen.svg)](https://pypi.python.org/pypi/numpy/1.14.3)
 [![](https://img.shields.io/badge/keras-2.1.6-brightgreen.svg)](https://pypi.python.org/pypi/keras/2.1.6)
-[![](https://img.shields.io/badge/tensorflow-1.4.0,1.6.0-brightgreen.svg)](https://pypi.python.org/pypi/tensorflow/1.6.0)<br>
+[![](https://img.shields.io/badge/tensorflow-1.4,1.6-brightgreen.svg)](https://pypi.python.org/pypi/tensorflow/1.6.0)<br>
 
 文本生成
 
