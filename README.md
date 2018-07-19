@@ -8,14 +8,14 @@
 文本生成
 
 ## **项目介绍**
-最近生成型的网络越来越火，就试着模型写写诗歌。网上这方面的资料和现成的代码还是挺多的。不过大多都是tensorflow，少量torch，我平时keras用的多一些，就想着用keras来写一下，不过效果不太好...<br>
-tensorflow的代码参考了github一个比较火的项目<https://github.com/yuyongsheng/tensorflow_poems>，在此表示感谢！
+最近生成型的网络越来越火，就试着模型写写诗歌。网上这方面的资料和现成的代码还是挺多的。不过大多都是tensorflow，少量torch，我平时keras用的多一些，就想着用keras来写一下，效果比tensorflow还是差不少<br>
+tensorflow的代码参考了github一个比较火的项目<https://github.com/jinfagang/tensorflow_poems>，在此表示感谢！
 
 ## **模块简介**
 ### 模块结构
 结构很简单，包括：<br>
 * **数据**：全唐诗，来源<https://github.com/todototry/AncientChinesePoemsDB/blob/master/全唐诗crawl_from郑州大学website.zip>，在此表示感谢！<br>
-* **预处理**：data_exploration.py是个脚本，用于合并、清洗每个txt文档；Data_process.py是个方法，用于分词、编码、填充<br>
+* **预处理**：data_poem.py是个脚本，用于合并、清洗每个txt文档；Data_process.py是个方法，用于分词、编码、填充<br>
 * **网络**：在文件夹rnn中，model_keras.py、model_tensorflow.py分别是keras、tensorflow的2层lstm<br>
 * **训练**：train_keras.py、train_tensorflow.py，分别用keras、tensorflow训练网络<br>
 * **生成**：generate_keras.py、generate_tensorflow.py，分别用keras、tensorflow生成诗歌<br>
@@ -34,37 +34,34 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/yu
 <br>
 2.在预测的时候不取唯一解，而是取最大概率的n个答案，做随机抽样。<br>
 <br>
-3.由于随机抽样很容易在标点生成的时候跳过标点，我加入了修正：小于3个字符出现标点重新抽样直到字，多余7个字符不出现标点重新抽样直到标点。这里抽样也必须是最大概率的n个，而不是作弊的方式人为断句。<br>
+3.对生成的结果做抽样而不是固定的取最大概率，可以让文字衔接多样化<br>
 
 ### 其他说明
 1.网上很多代码的做法是：每次输入一个字，输出lstm的hidden用于预测下一个字、state用于保存cell状态。下一个循环输入上一轮预测的字和state作为新一轮lsrm的cell初始状态。<br>
 我觉得太麻烦了，直接保留整个序列，[1] > [2]  |  [1,2] > [3]  |  [1,2,3] > [4]。因为tensorflow里面有一个output = tf.reshape(outputs, [-1,num_units])，输出的就是这句话后移一个单位预测值。<br>
 <br>
-2.训练的时候batchsize是大于1的，生成的时候batchsize=1，cell_mul.zero_state这里要注意。所以要保存训练的参数，生成的时候模型结构要修改，再导入训练参数。
+2.由于随机抽样很容易在标点生成的时候跳过标点，我一开始加入了修正：小于3个字符出现标点重新抽样直到字，多余7个字符不出现标点重新抽样直到标点。这里抽样也必须是最大概率的n个，而不是作弊的方式人为断句，这样的结果还是挺不错的，而且会出现4-7个字，比较有韵味。<br>
+但是后面发现，在抽样的时候不用均匀，而是给每个字附上计算得到的概率，RNN完全可以学到标点的位置，结果更贴近唐诗5、7字，也同样丢失了4、6字的风格。<br>
+3.训练的时候batchsize是大于1的，生成的时候batchsize=1，cell_mul.zero_state这里要注意。所以要保存训练的参数，生成的时候模型结构有改变，再导入训练参数。
 
 ## 成果展示
 **直接运行generate_keras.py、generate_tensorflow.py即可，在main里面修改参数**<br>
 <br>
 **Tensorflow**<br>
 ![](https://github.com/renjunxiang/generate_text/blob/master/picture/tensorflow.jpg)<br><br>
-**Tensorflow+修正**<br>
-![](https://github.com/renjunxiang/generate_text/blob/master/picture/tensorflow_correct.jpg)<br><br>
 **Keras**<br>
 ![](https://github.com/renjunxiang/generate_text/blob/master/picture/keras.jpg)<br><br>
-**Keras+修正**<br>
-![](https://github.com/renjunxiang/generate_text/blob/master/picture/keras_correct.jpg)<br><br>
 
 **有几首不错的诗大家看着乐呵乐呵**<br>
 <br>
 **神**<br>
-神明三献大安仁，只待千峰一道来。<br>
-自作山川不为语，却寻三郡是君家？<br>
+神龙既已落云泉，犹恐风流四百声。<br>
+几株红叶几重关，不得人间不敢归。<br>
 <br>
 **仙**<br>
-仙郎才上下天涯，东来此夜更堪说。<br>
-明晨更无言处论，长安一曲不为回。<br>
+仙驾千般出水滨，夜凉寒色向山眠。<br>
+万里江边过远梦，一日同吟不见人？<br>
 <br>
 **鬼**<br>
-鬼上风清夜更催，此夜相思谁敢羡。<br>
-长嗟故园空留住，明年莫测千重分。<br>
-愿看红萼花新枝，今朝无语何曾知？<br>
+鬼疟朝来入夜风，不似春窗入禁垣。<br>
+云飞树下春山暮，水满江山雪未飞。<br>

@@ -14,7 +14,12 @@ def generate(maxlen=60,
              num_words=3000,
              num_units=128,
              num_layers=2,
-             correct=True):
+             # correct=True,
+             mode='length',
+             file='poem',
+             len_min=0,
+             len_max=100
+             ):
     '''
     
     :param maxlen: 
@@ -22,23 +27,24 @@ def generate(maxlen=60,
     :param num_words: 
     :param num_units: 
     :param num_layers: 
-    :param correct: 用于修正长时间不出现标点，会强制从候选中选择标点
+    :param correct: 用于修正长时间不出现标点，会强制从候选中选择标点。np.random.choice加入概率后效果非常好,不在需要修正
     :return: 
     '''
     data_process = Data_process()
     x, y, word_index = data_process.data_transform(num_words=num_words,
-                                                   mode='length',
-                                                   len_min=0,
-                                                   len_max=100,
+                                                   mode=mode,
+                                                   len_min=len_min,
+                                                   len_max=len_max,
                                                    maxlen=maxlen,
-                                                   one_hot=False)
+                                                   one_hot=False,
+                                                   file=file)
 
     input_data = tf.placeholder(tf.int32, [None, None])
     output_targets = tf.placeholder(tf.int32, [None, None])
 
     tensors = model_tensorflow(input_data=input_data,
                                output_targets=output_targets,
-                               num_words=num_words,
+                               num_words=data_process.num_words,
                                num_units=num_units,
                                num_layers=num_layers,
                                batchsize=batchsize)
@@ -47,7 +53,7 @@ def generate(maxlen=60,
     while True:
         with tf.Session() as sess:
             sess.run(initializer)
-            checkpoint = tf.train.latest_checkpoint(DIR + '/model/')
+            checkpoint = tf.train.latest_checkpoint(DIR + '/model/%s/' % file)
             saver.restore(sess, checkpoint)
 
             try:
@@ -73,25 +79,26 @@ def generate(maxlen=60,
                     [y_predict, last_state] = sess.run([tensors['prediction'], tensors['last_state']],
                                                        feed_dict={input_data: np.array([input_index])})
                     y_predict = y_predict[-1]
-                    y_predict = {num: i for num, i in enumerate(y_predict)}
-                    index_max = sorted(y_predict, key=lambda x: y_predict[x], reverse=True)[:8]
-                    index_next = np.random.choice(index_max)
+                    # y_predict = {num: i for num, i in enumerate(y_predict)}
+                    # index_max = sorted(y_predict, key=lambda x: y_predict[x], reverse=True)[:]
+                    # p_max = [y_predict[i] for i in index_max]
+                    index_next = np.random.choice(np.arange(len(y_predict)),p=y_predict)
                     punctuation_index += 1
-                    if correct:
-                        # [3,7]之间个字符出现标点正常，重置索引
-                        if index_next in punctuation and punctuation_index > 3 and punctuation_index < 8:
-                            punctuation_index = 0
-                        # 当超过7个字符没有出现标点，且标点出现在候选中，选择标点
-                        elif punctuation_index >= 8:
-                            punctuation_index = 0
-                            while (set(punctuation) & set(index_max)) and (index_next not in punctuation):
-                                index_next = np.random.choice(index_max)
-                        # 当少于3个字符出现标点，选择文字
-                        elif punctuation_index <= 3:
-                            while index_next in punctuation:
-                                index_next = np.random.choice(index_max)
-                        else:
-                            pass
+                    # if correct:
+                    #     # [3,7]之间个字符出现标点正常，重置索引
+                    #     if index_next in punctuation and punctuation_index > 3 and punctuation_index < 8:
+                    #         punctuation_index = 0
+                    #     # 当超过7个字符没有出现标点，且标点出现在候选中，选择标点
+                    #     elif punctuation_index >= 8:
+                    #         punctuation_index = 0
+                    #         while (set(punctuation) & set(index_max)) and (index_next not in punctuation):
+                    #             index_next = np.random.choice(index_max)
+                    #     # 当少于3个字符出现标点，选择文字
+                    #     elif punctuation_index <= 3:
+                    #         while index_next in punctuation:
+                    #             index_next = np.random.choice(index_max)
+                    #     else:
+                    #         pass
 
                     if len(input_index) > 100:
                         break
@@ -110,5 +117,7 @@ def generate(maxlen=60,
 
 
 if __name__ == '__main__':
-    generate(maxlen=100, batchsize=1, num_words=20000,
-             num_units=128, num_layers=2, correct=True)
+    generate(maxlen=40, batchsize=1, num_words=20000,
+             num_units=128, num_layers=2,
+             mode='length', file='poem',
+             len_min=10, len_max=100)

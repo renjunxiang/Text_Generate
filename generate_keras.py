@@ -7,7 +7,10 @@ import re
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def generate_text(model=None, word_index=None, correct=True):
+def generate_text(model=None,
+                  word_index=None,
+                  # correct=True
+                  ):
     '''
     生成文本
     :param model: 训练好的模型
@@ -37,25 +40,25 @@ def generate_text(model=None, word_index=None, correct=True):
                 input_index.append(index_next)
                 y_predict = model.predict(np.array([input_index]))
                 y_predict = y_predict[0][-1]
-                y_predict = {num: i for num, i in enumerate(y_predict)}
-                index_max = sorted(y_predict, key=lambda x: y_predict[x], reverse=True)[:10]
-                index_next = np.random.choice(index_max)
+                # y_predict = {num: i for num, i in enumerate(y_predict)}
+                # index_max = sorted(y_predict, key=lambda x: y_predict[x], reverse=True)[:10]
+                index_next = np.random.choice(np.arange(len(y_predict)), p=y_predict)
                 punctuation_index += 1
-                if correct:
-                    # [3,7]之间个字符出现标点正常，重置索引
-                    if index_next in punctuation and punctuation_index > 3 and punctuation_index < 8:
-                        punctuation_index = 0
-                    # 当超过7个字符没有出现标点，且标点出现在候选中，选择标点
-                    elif punctuation_index >= 8:
-                        punctuation_index = 0
-                        while (set(punctuation) & set(index_max)) and (index_next not in punctuation):
-                            index_next = np.random.choice(index_max)
-                    # 当少于3个字符出现标点，选择文字
-                    elif punctuation_index <= 3:
-                        while index_next in punctuation:
-                            index_next = np.random.choice(index_max)
-                    else:
-                        pass
+                # if correct:
+                #     # [3,7]之间个字符出现标点正常，重置索引
+                #     if index_next in punctuation and punctuation_index > 3 and punctuation_index < 8:
+                #         punctuation_index = 0
+                #     # 当超过7个字符没有出现标点，且标点出现在候选中，选择标点
+                #     elif punctuation_index >= 8:
+                #         punctuation_index = 0
+                #         while (set(punctuation) & set(index_max)) and (index_next not in punctuation):
+                #             index_next = np.random.choice(index_max)
+                #     # 当少于3个字符出现标点，选择文字
+                #     elif punctuation_index <= 3:
+                #         while index_next in punctuation:
+                #             index_next = np.random.choice(index_max)
+                #     else:
+                #         pass
 
                 if len(input_index) > 100:
                     break
@@ -75,7 +78,8 @@ def generate_text(model=None, word_index=None, correct=True):
 
 
 if __name__ == '__main__':
-    with open(DIR + '/model/word_index.pkl', mode='rb') as f:
+    file='poem'
+    with open(DIR + '/model/%s/word_index.pkl'%file, mode='rb') as f:
         word_index = pickle.load(f)
-    model = load_model(DIR + '/model/model_keras.h5')
-    generate_text(model=model, word_index=word_index, correct=True)
+    model = load_model(DIR + '/model/%s/model_keras.h5'%file)
+    generate_text(model=model, word_index=word_index)

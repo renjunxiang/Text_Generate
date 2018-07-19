@@ -13,15 +13,19 @@ def train(maxlen=40,
           num_units=128,
           epochs=1,
           mode='length',
+          file='poem',
+          len_min=0,
+          len_max=100,
           one_hot=False):
     data_process = Data_process()
     x, y, word_index = data_process.data_transform(num_words=num_words,
                                                    mode=mode,
-                                                   len_min=5,
-                                                   len_max=100,
+                                                   file=file,
+                                                   len_min=len_min,
+                                                   len_max=len_max,
                                                    maxlen=maxlen,
                                                    one_hot=one_hot)
-    with open(DIR + '/model/word_index.pkl', mode='wb') as f:
+    with open(DIR + '/model/%s/word_index.pkl'%file, mode='wb') as f:
         pickle.dump(word_index, f)
     model = model_keras(num_words=data_process.num_words, num_units=num_units)
     for epoch in range(epochs):
@@ -36,10 +40,11 @@ def train(maxlen=40,
                 y_batch = np.array([data_process.creat_one_hot(y_1, data_process.num_words) for y_1 in y_batch])
                 print('batch:', batch + 1)
                 model.fit(x=x_batch, y=y_batch, epochs=1, batch_size=batchsize, verbose=1)
-        model.save(DIR + '/model/model_keras_%d.h5' % (epoch))
+        model.save(DIR + '/model/%s/model_keras_%d.h5' % (file,epoch))
 
 
 if __name__ == '__main__':
     train(maxlen=100, batchsize=64, num_words=3000,
           num_units=128, epochs=1,
-          mode='length', one_hot=False)
+          mode='length', file='poem',
+          len_min=10, len_max=50, one_hot=False)

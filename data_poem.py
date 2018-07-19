@@ -18,7 +18,7 @@ for file in files:
         text = f.readlines()
         if text:
             text = text[0]
-            text = re.sub(pattern='[_（）：《》]', repl='', string=text)
+            text = re.sub(pattern='[_（）《》 ]', repl='', string=text)
             texts.append(text + end)
             texts_str += text
         else:

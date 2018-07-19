@@ -58,7 +58,7 @@ def train(maxlen=40,
 
 
 if __name__ == '__main__':
-    train(maxlen=50, batchsize=64, num_words=20000,
-          num_units=128, num_layers=2, epochs=1,
+    train(maxlen=80, batchsize=64, num_words=20000,
+          num_units=128, num_layers=2, epochs=5,
           mode='length', file='story',
-          len_min=10, len_max=50)
+          len_min=5, len_max=80)
