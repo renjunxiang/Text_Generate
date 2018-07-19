@@ -43,6 +43,7 @@ tensorflow的代码参考了github一个比较火的项目https://github.com/yuy
 2.训练的时候batchsize是大于1的，生成的时候batchsize=1，cell_mul.zero_state这里要注意。所以要保存训练的参数，生成的时候模型结构要修改，再导入训练参数。
 
 ### 生成的部分结果
+**直接运行generate_keras.py、generate_tensorflow.py即可，在main里面修改参数**<br>
 **Tensorflow**<br>
 ![](https://github.com/renjunxiang/generate_text/blob/master/picture/tensorflow.jpg)<br><br>
 **Tensorflow+修正**<br>
