@@ -106,8 +106,8 @@ class Data_process():
             # else:
             #     print('finish pad_sequences %d samples(1.0)' % len(texts_seq))
 
-        pad_seq = pad_sequences(x, maxlen)
-        y_pad_seq = pad_sequences(y, maxlen - 1)
+        pad_seq = pad_sequences(x, maxlen, padding='post', truncating='post')
+        y_pad_seq = pad_sequences(y, maxlen - 1, padding='post', truncating='post')
 
         # 生成x和y
         self.x_pad_seq = np.array([i[:-1] for i in pad_seq])
@@ -143,7 +143,6 @@ class Data_process():
         else:
             y = np.array(self.y_pad_seq)
         return x, y, self.word_index
-
 
 if __name__ == '__main__':
     pass

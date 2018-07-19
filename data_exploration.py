@@ -4,14 +4,15 @@ import pickle
 from collections import Counter
 import re
 
-path = './data/Tang_Poetry'
+DIR = os.path.dirname(os.path.abspath(__file__))
+path = DIR + '/data/Tang_Poetry'
 files = os.listdir(path)
 
 # start = 'B'
 end = 'E'
 
 texts = []
-texts_str=''
+texts_str = ''
 for file in files:
     with open(path + '/' + file, mode='r') as f:
         text = f.readlines()
@@ -19,20 +20,20 @@ for file in files:
             text = text[0]
             text = re.sub(pattern='[_（）：《》]', repl='', string=text)
             texts.append(text + end)
-            texts_str+=text
+            texts_str += text
         else:
             continue
 
-with open('./data/Tang_Poetry.txt', mode='w') as f:
-    f.write(texts_str)
+# with open(DIR + '/data/Tang_Poetry.txt', mode='w') as f:
+#     f.write(texts_str)
 
-with open('./data/Tang_Poetry.pkl', mode='wb') as f:
+with open(DIR + '/data/Tang_Poetry.pkl', mode='wb') as f:
     pickle.dump(texts, f)
 
-texts_len=Counter([len(i) for i in texts])
-texts_len=pd.DataFrame({'length':list(texts_len.keys()),'count':list(texts_len.values())},
-                       columns=['length','count'])
-texts_len=texts_len.sort_values(by='count',ascending=False).iloc[:10,]
+texts_len = Counter([len(i) for i in texts])
+texts_len = pd.DataFrame({'length': list(texts_len.keys()), 'count': list(texts_len.values())},
+                         columns=['length', 'count'])
+texts_len = texts_len.sort_values(by='count', ascending=False).iloc[:10, ]
 '''
      length  count
 44       50  12190
@@ -47,4 +48,3 @@ texts_len=texts_len.sort_values(by='count',ascending=False).iloc[:10,]
 36       42    432
 
 '''
-

@@ -12,10 +12,11 @@ def train(maxlen=40,
           num_words=4000,
           num_units=128,
           num_layers=2,
-          epochs=1):
+          epochs=1,
+          mode='length'):
     data_process = Data_process()
     x, y, word_index = data_process.data_transform(num_words=num_words,
-                                                   mode='length',
+                                                   mode=mode,
                                                    len_min=0,
                                                    len_max=100,
                                                    maxlen=maxlen,
@@ -25,7 +26,7 @@ def train(maxlen=40,
 
     tensors = model_tensorflow(input_data=input_data,
                                output_targets=output_targets,
-                               num_words=num_words,
+                               num_words=data_process.num_words,
                                num_units=num_units,
                                num_layers=num_layers,
                                batchsize=batchsize)
@@ -48,9 +49,9 @@ def train(maxlen=40,
                 ], feed_dict={input_data: x_batch, output_targets: y_batch})
                 print('Epoch: %d, batch: %d, training loss: %.6f' % (epoch + 1, batch + 1, loss))
             if epoch % 1 == 0:
-                saver.save(sess, DIR+'/model/train', global_step=epoch)
+                saver.save(sess, DIR + '/model/train', global_step=epoch)
 
 
 if __name__ == '__main__':
-    train(maxlen=24, batchsize=64, num_words=5000,
-          num_units=128, num_layers=2, epochs=1)
+    train(maxlen=100, batchsize=64, num_words=20000,
+          num_units=128, num_layers=2, epochs=1, mode='length')
