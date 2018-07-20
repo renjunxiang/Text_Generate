@@ -14,7 +14,7 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 ## **模块简介**
 ### 模块结构
 结构很简单，包括：<br>
-* **数据**：全唐诗，来源<https://github.com/todototry/AncientChinesePoemsDB>在此表示感谢！<br>
+* **数据**：全唐诗，来源<https://github.com/todototry/AncientChinesePoemsDB>，在此表示感谢！<br>
 * **预处理**：data_poem.py是个脚本，用于合并、清洗每个txt文档；Data_process.py是个方法，用于分词、编码、填充<br>
 * **网络**：在文件夹rnn中，model_keras.py、model_tensorflow.py分别是keras、tensorflow的2层lstm<br>
 * **训练**：train_keras.py、train_tensorflow.py，分别用keras、tensorflow训练网络<br>
@@ -42,6 +42,7 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 但是后面发现，在抽样的时候不用均匀，而是给每个字附上计算得到的概率，RNN完全可以学到标点的位置，结果更贴近唐诗5、7字，也同样丢失了4、6字的风格。<br>
 <br>
 3.训练的时候batchsize是大于1的，生成的时候batchsize=1，cell_mul.zero_state这里要注意。所以要保存训练的参数，生成的时候模型结构有改变，再导入训练参数。<br>
+<br>
 4.闲来无事想试着生成小说，网上随便下了一个叫《神级巫医在都市》，结果还是差强人意。
 
 ## 成果展示
