@@ -46,7 +46,8 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 4.闲来无事想试着生成小说，网上随便下了一个叫《神级巫医在都市》，结果还是差强人意。
 
 ## 成果展示
-**直接运行generate_keras.py、generate_tensorflow.py即可，在main里面修改参数**<br>
+**先运行train_keras_poem.py、train_tensorflow_poem.py进行训练，再运行generate_keras_poem.py、generate_tensorflow_poem.py即可**<br>
+在main里面修改参数，具体细节看代码吧，懒得做太多的封装~<br>
 <br>
 **Tensorflow 诗歌 随机抽样+修正**<br>
 ![](https://github.com/renjunxiang/generate_text/blob/master/picture/tensorflow_correct.jpg)<br><br>
