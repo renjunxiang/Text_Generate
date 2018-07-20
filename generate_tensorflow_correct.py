@@ -14,7 +14,7 @@ def generate(maxlen=60,
              num_words=3000,
              num_units=128,
              num_layers=2,
-             # correct=True,
+             correct=True,
              mode='length',
              file='poem',
              len_min=0,
@@ -79,26 +79,26 @@ def generate(maxlen=60,
                     [y_predict, last_state] = sess.run([tensors['prediction'], tensors['last_state']],
                                                        feed_dict={input_data: np.array([input_index])})
                     y_predict = y_predict[-1]
-                    # y_predict = {num: i for num, i in enumerate(y_predict)}
-                    # index_max = sorted(y_predict, key=lambda x: y_predict[x], reverse=True)[:]
+                    y_predict = {num: i for num, i in enumerate(y_predict)}
+                    index_max = sorted(y_predict, key=lambda x: y_predict[x], reverse=True)[:10]
                     # p_max = [y_predict[i] for i in index_max]
-                    index_next = np.random.choice(np.arange(len(y_predict)),p=y_predict)
+                    index_next = np.random.choice(index_max)
                     punctuation_index += 1
-                    # if correct:
-                    #     # [3,7]之间个字符出现标点正常，重置索引
-                    #     if index_next in punctuation and punctuation_index > 3 and punctuation_index < 8:
-                    #         punctuation_index = 0
-                    #     # 当超过7个字符没有出现标点，且标点出现在候选中，选择标点
-                    #     elif punctuation_index >= 8:
-                    #         punctuation_index = 0
-                    #         while (set(punctuation) & set(index_max)) and (index_next not in punctuation):
-                    #             index_next = np.random.choice(index_max)
-                    #     # 当少于3个字符出现标点，选择文字
-                    #     elif punctuation_index <= 3:
-                    #         while index_next in punctuation:
-                    #             index_next = np.random.choice(index_max)
-                    #     else:
-                    #         pass
+                    if correct:
+                        # [3,7]之间个字符出现标点正常，重置索引
+                        if index_next in punctuation and punctuation_index > 3 and punctuation_index < 8:
+                            punctuation_index = 0
+                        # 当超过7个字符没有出现标点，且标点出现在候选中，选择标点
+                        elif punctuation_index >= 8:
+                            punctuation_index = 0
+                            while (set(punctuation) & set(index_max)) and (index_next not in punctuation):
+                                index_next = np.random.choice(index_max)
+                        # 当少于3个字符出现标点，选择文字
+                        elif punctuation_index <= 3:
+                            while index_next in punctuation:
+                                index_next = np.random.choice(index_max)
+                        else:
+                            pass
 
                     if len(input_index) > 100:
                         break
@@ -117,7 +117,8 @@ def generate(maxlen=60,
 
 
 if __name__ == '__main__':
-    generate(maxlen=40, batchsize=1, num_words=20000,
+    generate(mode='length', file='poem',
+             len_min=10, len_max=50,
+             maxlen=50, num_words=20000,
              num_units=128, num_layers=2,
-             mode='length', file='poem',
-             len_min=10, len_max=100)
+             batchsize=1)
