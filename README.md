@@ -38,7 +38,7 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 1.网上很多代码的做法是：每次输入一个字，输出lstm的hidden用于预测下一个字、state用于保存cell状态。下一个循环输入上一轮预测的字和state作为新一轮lsrm的cell初始状态。<br>
 我觉得太麻烦了，直接保留整个序列，[1] > [2]  |  [1,2] > [3]  |  [1,2,3] > [4]。因为tensorflow里面有一个output = tf.reshape(outputs, [-1,num_units])，输出的就是这句话后移一个单位预测值。<br>
 <br>
-2.由于随机抽样很容易在标点生成的时候跳过标点，我一开始加入了修正：小于3个字符出现标点重新抽样直到字，多余7个字符不出现标点重新抽样直到标点。这里抽样也必须是最大概率的n个，而不是作弊的方式人为断句，这样的结果还是挺不错的，而且会出现4-7个字，比较有韵味。<br>
+2.由于随机抽样很容易在标点生成的时候跳过标点，我一开始加入了修正：小于3个字符出现标点重新抽样直到字，多余7个字符不出现标点重新抽样直到标点。这里抽样也必须是最大概率的n个，而不是作弊的方式人为断句，这样的结果还是挺不错的，而且会出现4-7个字，比较有韵味，这段代码在generate_tensorflow_correct.py。<br>
 但是后面发现，在抽样的时候不用均匀，而是给每个字附上计算得到的概率，RNN完全可以学到标点的位置，结果更贴近唐诗5、7字，也同样丢失了4、6字的风格。<br>
 <br>
 3.训练的时候batchsize是大于1的，生成的时候batchsize=1，cell_mul.zero_state这里要注意。所以要保存训练的参数，生成的时候模型结构有改变，再导入训练参数。
@@ -46,9 +46,11 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 ## 成果展示
 **直接运行generate_keras.py、generate_tensorflow.py即可，在main里面修改参数**<br>
 <br>
-**Tensorflow**<br>
+**Tensorflow随机抽样+修正**<br>
+![](https://github.com/renjunxiang/generate_text/blob/master/picture/tensorflow_correct.jpg)<br><br>
+**Tensorflow概率抽样**<br>
 ![](https://github.com/renjunxiang/generate_text/blob/master/picture/tensorflow.jpg)<br><br>
-**Keras**<br>
+**Keras概率抽样**<br>
 ![](https://github.com/renjunxiang/generate_text/blob/master/picture/keras.jpg)<br><br>
 
 **有几首不错的诗大家看着乐呵乐呵**<br>
