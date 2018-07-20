@@ -46,7 +46,7 @@ def generate(batchsize=1,
             saver.restore(sess, checkpoint)
 
             try:
-                print('生成小说，作诗前请确保有模型。输入开头或随机，quit=离开；\n请输入命令：')
+                print('生成小说，写作前请确保有模型。输入开头或随机，quit=离开；\n请输入命令：')
 
                 start_word = input()
                 if start_word == 'quit':
