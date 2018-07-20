@@ -50,6 +50,8 @@ def generate(batchsize=1,
                 start_word = input()
                 if start_word == 'quit':
                     break
+                if start_word == '':
+                    start_word = np.random.choice(list(word_index.keys()), 1)
 
                 print('开始创作')
                 input_index = []
