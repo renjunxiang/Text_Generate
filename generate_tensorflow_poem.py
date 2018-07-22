@@ -61,14 +61,14 @@ def generate(batchsize=1,
                 input_index = input_index[:-1]
 
                 while index_next not in [0, word_index['E']]:
+                    if len(input_index) > 100:
+                        break
                     input_index.append(index_next)
                     y_predict = sess.run(tensors['prediction'],
                                          feed_dict={input_data: np.array([input_index])})
                     y_predict = y_predict[-1]
                     index_next = np.random.choice(np.arange(len(y_predict)), p=y_predict)
 
-                    if len(input_index) > 100:
-                        break
                 index_word = {word_index[i]: i for i in word_index}
                 text = [index_word[i] for i in input_index]
                 text = ''.join(text)
