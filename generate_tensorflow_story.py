@@ -52,7 +52,12 @@ def generate(batchsize=1,
                 if start_word == 'quit':
                     break
                 if start_word == '':
-                    start_word = np.random.choice(list(word_index.keys()), 1)
+                    words = list(word_index.keys())
+                    # 随机初始不能是标点和终止符
+                    for i in ['。', '？', '！', 'E']:
+                        words.remove(i)
+                    start_word = np.random.choice(words, 1)
+
                 print('开始创作')
                 input_index = []
                 for i in start_word:
@@ -60,20 +65,16 @@ def generate(batchsize=1,
                     input_index.append(index_next)
                 input_index = input_index[:-1]
 
-                # 用于修正标点位置
-                punctuation = [word_index['，'], word_index['。'], word_index['？']]
-                punctuation_index = len(start_word)
-
-                # while index_next not in [0, word_index['E']]:
+                # 原则上不会出现0,保险起见还是加上去
                 while index_next not in [0, word_index['E']]:
                     input_index.append(index_next)
                     [y_predict, last_state] = sess.run([tensors['prediction'], tensors['last_state']],
                                                        feed_dict={input_data: np.array([input_index])})
                     y_predict = y_predict[-1]
                     index_next = np.random.choice(np.arange(len(y_predict)), p=y_predict)
-                    punctuation_index += 1
                     if len(input_index) > 200:
                         break
+
                 index_word = {word_index[i]: i for i in word_index}
                 text = [index_word[i] for i in input_index]
                 text = ''.join(text)

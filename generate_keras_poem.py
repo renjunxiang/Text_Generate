@@ -26,7 +26,11 @@ def generate_text(model=None,
             if start_word == 'quit':
                 break
             if start_word == '':
-                start_word = np.random.choice(list(word_index.keys()), 1)
+                words = list(word_index.keys())
+                # 随机初始不能是标点和终止符
+                for i in ['。', '？', '！', 'E']:
+                    words.remove(i)
+                start_word = np.random.choice(words, 1)
 
             print('开始创作')
             input_index = []
@@ -35,32 +39,12 @@ def generate_text(model=None,
                 input_index.append(index_next)
             input_index = input_index[:-1]
 
-            # 用于修正标点位置
-            punctuation = [word_index['，'], word_index['。'], word_index['？']]
-            punctuation_index = len(start_word)
+            # 原则上不会出现0,保险起见还是加上去
             while index_next not in [0, word_index['E']]:
                 input_index.append(index_next)
                 y_predict = model.predict(np.array([input_index]))
                 y_predict = y_predict[0][-1]
-                # y_predict = {num: i for num, i in enumerate(y_predict)}
-                # index_max = sorted(y_predict, key=lambda x: y_predict[x], reverse=True)[:10]
                 index_next = np.random.choice(np.arange(len(y_predict)), p=y_predict)
-                punctuation_index += 1
-                # if correct:
-                #     # [3,7]之间个字符出现标点正常，重置索引
-                #     if index_next in punctuation and punctuation_index > 3 and punctuation_index < 8:
-                #         punctuation_index = 0
-                #     # 当超过7个字符没有出现标点，且标点出现在候选中，选择标点
-                #     elif punctuation_index >= 8:
-                #         punctuation_index = 0
-                #         while (set(punctuation) & set(index_max)) and (index_next not in punctuation):
-                #             index_next = np.random.choice(index_max)
-                #     # 当少于3个字符出现标点，选择文字
-                #     elif punctuation_index <= 3:
-                #         while index_next in punctuation:
-                #             index_next = np.random.choice(index_max)
-                #     else:
-                #         pass
 
                 if len(input_index) > 100:
                     break

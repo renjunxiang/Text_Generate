@@ -78,7 +78,7 @@ class Data_process():
             texts_new = []
             for i in texts:
                 mod = len(i) % maxlen
-                i += ('E' * mod)
+                i += ('E' * (maxlen - mod))
                 for j in range(len(i) // maxlen + 1):
                     texts_new.append(i[j * maxlen:(j * maxlen + maxlen)])
             texts = texts_new

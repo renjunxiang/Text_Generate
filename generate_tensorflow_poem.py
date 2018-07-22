@@ -51,7 +51,11 @@ def generate(batchsize=1,
                 if start_word == 'quit':
                     break
                 if start_word == '':
-                    start_word = np.random.choice(list(word_index.keys()), 1)
+                    words = list(word_index.keys())
+                    # 随机初始不能是标点和终止符
+                    for i in ['。', '？', '！', 'E']:
+                        words.remove(i)
+                    start_word = np.random.choice(words, 1)
 
                 print('开始创作')
                 input_index = []
@@ -60,6 +64,7 @@ def generate(batchsize=1,
                     input_index.append(index_next)
                 input_index = input_index[:-1]
 
+                # 原则上不会出现0,保险起见还是加上去
                 while index_next not in [0, word_index['E']]:
                     if len(input_index) > 100:
                         break
@@ -74,7 +79,7 @@ def generate(batchsize=1,
                 text = ''.join(text)
             except Exception as e:
                 print(e)
-                text = '不能识别%s' % start_word
+                text = '不能识别%s。' % start_word
             finally:
                 text_list = re.findall(pattern='[^。？！]*[。？！]', string=text)
                 print('作诗完成：\n')
