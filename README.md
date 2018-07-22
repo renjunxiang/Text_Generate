@@ -43,7 +43,7 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 <br>
 3.训练的时候batchsize是大于1的，生成的时候batchsize=1，cell_mul.zero_state这里要注意。所以要保存训练的参数，生成的时候模型结构有改变，再导入训练参数。<br>
 <br>
-4.闲来无事想试着生成小说，网上随便下了一个叫《神级巫医在都市》，结果还是差强人意。
+4.闲来无事想试着生成小说，一开始用的网络小说生成的很差，后来找了射雕英雄传有那么点感觉。
 
 ## 成果展示
 **先运行train_keras_poem.py、train_tensorflow_poem.py进行训练，再运行generate_keras_poem.py、generate_tensorflow_poem.py即可**<br>
