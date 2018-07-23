@@ -33,9 +33,6 @@ def generate_keras(process_path='./model/poem/data_process.pkl',
                 words.remove(i)
             start_word = np.random.choice(words, 1)
         try:
-            if start_word == '':
-                start_word = np.random.choice(list(word_index.keys()), 1)
-
             print('开始创作')
             input_index = []
             for i in start_word:

@@ -47,14 +47,14 @@ def generate_tensorflow(process_path=DIR + '/model/poem/poem.pkl',
                 print('\n再见！')
                 break
 
-            try:
-                if start_word == '':
-                    words = list(word_index.keys())
-                    # 随机初始不能是标点和终止符
-                    for i in ['。', '？', '！', 'E']:
-                        words.remove(i)
-                    start_word = np.random.choice(words, 1)
+            if start_word == '':
+                words = list(word_index.keys())
+                # 随机初始不能是标点和终止符
+                for i in ['。', '？', '！', 'E']:
+                    words.remove(i)
+                start_word = np.random.choice(words, 1)
 
+            try:
                 print('开始创作')
                 input_index = []
                 for i in start_word:
