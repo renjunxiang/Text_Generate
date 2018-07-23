@@ -1,68 +1,52 @@
 import os
 import numpy as np
 import tensorflow as tf
-from Data_process import Data_process
-from rnn import model_tensorflow
+from .rnn import model_tensorflow
 import re
+import pickle
 
 DIR = os.path.dirname(os.path.abspath(__file__))
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
 
 
-def generate(maxlen=60,
-             batchsize=1,
-             num_words=3000,
-             num_units=128,
-             num_layers=2,
-             correct=True,
-             mode='length',
-             file='poem',
-             len_min=0,
-             len_max=100
-             ):
+def generate_tensorflow(process_path=DIR + '/model/poem/poem.pkl',
+                        model_path=DIR + '/model/poem/train',
+                        maxlen=80,
+                        correct=True
+                        ):
     '''
-    
-    :param maxlen: 
-    :param batchsize: 
-    :param num_words: 
-    :param num_units: 
-    :param num_layers: 
-    :param correct: 用于修正长时间不出现标点，会强制从候选中选择标点。np.random.choice加入概率后效果非常好,不在需要修正
-    :return: 
-    '''
-    data_process = Data_process()
-    x, y, word_index = data_process.data_transform(num_words=num_words,
-                                                   mode=mode,
-                                                   len_min=len_min,
-                                                   len_max=len_max,
-                                                   maxlen=maxlen,
-                                                   one_hot=False,
-                                                   file=file)
 
+    :param process_path: 训预处理模型路径
+    :param model_path: 网络参数路径
+    :param maxlen: maxlen创作最大长度
+    :return:
+    '''
+    with open(process_path, mode='rb') as f:
+        data_process = pickle.load(f)
+    word_index = data_process.word_index
     input_data = tf.placeholder(tf.int32, [None, None])
     output_targets = tf.placeholder(tf.int32, [None, None])
 
     tensors = model_tensorflow(input_data=input_data,
                                output_targets=output_targets,
                                num_words=data_process.num_words,
-                               num_units=num_units,
-                               num_layers=num_layers,
-                               batchsize=batchsize)
+                               num_units=data_process.num_units,
+                               num_layers=data_process.num_layers,
+                               batchsize=1)
     saver = tf.train.Saver(tf.global_variables())
     initializer = tf.global_variables_initializer()
     while True:
         with tf.Session() as sess:
             sess.run(initializer)
-            checkpoint = tf.train.latest_checkpoint(DIR + '/model/%s/' % file)
+            checkpoint = tf.train.latest_checkpoint(model_path)
             saver.restore(sess, checkpoint)
 
+            print('中文作诗，作诗前请确保有模型。输入开头，quit=离开；\n请输入命令：')
+
+            start_word = input()
+            if start_word == 'quit':
+                break
+
             try:
-                print('中文作诗，作诗前请确保有模型。输入开头，quit=离开；\n请输入命令：')
-
-                start_word = input()
-                if start_word == 'quit':
-                    break
-
                 print('开始创作')
                 input_index = []
                 for i in start_word:
@@ -100,7 +84,7 @@ def generate(maxlen=60,
                         else:
                             pass
 
-                    if len(input_index) > 100:
+                    if len(input_index) > maxlen:
                         break
                 index_word = {word_index[i]: i for i in word_index}
                 text = [index_word[i] for i in input_index]
@@ -116,9 +100,3 @@ def generate(maxlen=60,
                 print('\n------------我是分隔符------------\n')
 
 
-if __name__ == '__main__':
-    generate(mode='length', file='poem',
-             len_min=10, len_max=50,
-             maxlen=50, num_words=20000,
-             num_units=128, num_layers=2,
-             batchsize=1)

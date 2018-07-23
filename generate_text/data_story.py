@@ -29,20 +29,28 @@ texts_len = Counter([len(i) for i in texts])
 texts_len = pd.DataFrame({'length': list(texts_len.keys()), 'count': list(texts_len.values())},
                          columns=['length', 'count'])
 texts_len = texts_len.sort_values(by='count', ascending=False).iloc[:20, ]
+print(texts_len)
 '''
     length  count
-21      24   1278
-25      28   1223
-27      30   1208
-28      31   1208
-24      27   1206
-23      26   1200
-17      20   1188
-20      23   1185
-26      29   1184
-22      25   1171
-19      22   1166
-18      21   1159
-15      18   1147
+141     145     65
+101     105     65
+106     110     63
+103     107     63
+145     149     62
+105     109     62
+95       99     60
+102     106     60
+94       98     60
+143     147     58
+66       70     57
+107     111     56
+68       72     55
+98      102     55
+104     108     55
+134     138     54
+142     146     54
+67       71     54
+96      100     53
+178     182     53
 
 '''

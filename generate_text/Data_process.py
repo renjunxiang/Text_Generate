@@ -108,7 +108,6 @@ class Data_process():
 
     def creat_x_y(self, maxlen=40, one_hot=False):
         '''
-
         :param one_hot: 是否对y转one-hot
         :return:
         '''

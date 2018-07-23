@@ -25,9 +25,9 @@ def model_tensorflow(input_data=None,
         inputs = tf.nn.embedding_lookup(w, input_data)
 
     with tf.name_scope('lstm'):
-        lstmcell = tf.contrib.rnn.BasicLSTMCell
+        lstmcell = tf.nn.rnn_cell.BasicLSTMCell
         cell_list = [lstmcell(num_units, state_is_tuple=True) for i in range(num_layers)]
-        cell_mul = tf.contrib.rnn.MultiRNNCell(cell_list, state_is_tuple=True)
+        cell_mul = tf.nn.rnn_cell.MultiRNNCell(cell_list, state_is_tuple=True)
 
         initial_state = cell_mul.zero_state(batch_size=batchsize, dtype=tf.float32)
         # 序列输出shape [?,?,num_units]

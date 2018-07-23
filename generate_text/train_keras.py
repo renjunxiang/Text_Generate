@@ -1,5 +1,5 @@
-from Data_process import Data_process
-from rnn import model_keras
+from . import Data_process
+from .rnn import model_keras
 import os
 import pickle
 import numpy as np
@@ -7,16 +7,18 @@ import numpy as np
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def train(maxlen=40,
-          batchsize=64,
-          num_words=3000,
-          num_units=128,
-          epochs=1,
-          mode='length',
-          file='poem',
-          len_min=0,
-          len_max=100,
-          one_hot=False):
+def train_keras(maxlen=40,
+                batchsize=64,
+                num_words=3000,
+                num_units=128,
+                epochs=1,
+                mode='length',
+                file='poem',
+                len_min=0,
+                len_max=100,
+                one_hot=False,
+                process_path=DIR + '/model/poem/data_process.pkl',
+                model_path=DIR + '/model/poem/keras.h5'):
     data_process = Data_process()
     x, y, word_index = data_process.data_transform(num_words=num_words,
                                                    mode=mode,
@@ -25,7 +27,7 @@ def train(maxlen=40,
                                                    len_max=len_max,
                                                    maxlen=maxlen,
                                                    one_hot=one_hot)
-    with open(DIR + '/model/%s/word_index.pkl'%file, mode='wb') as f:
+    with open(process_path, mode='wb') as f:
         pickle.dump(word_index, f)
     model = model_keras(num_words=data_process.num_words, num_units=num_units)
     for epoch in range(epochs):
@@ -40,11 +42,5 @@ def train(maxlen=40,
                 y_batch = np.array([data_process.creat_one_hot(y_1, data_process.num_words) for y_1 in y_batch])
                 print('batch:', batch + 1)
                 model.fit(x=x_batch, y=y_batch, epochs=1, batch_size=batchsize, verbose=1)
-        model.save(DIR + '/model/%s/model_keras_%d.h5' % (file,epoch))
+        model.save(model_path)
 
-
-if __name__ == '__main__':
-    train(maxlen=100, batchsize=64, num_words=3000,
-          num_units=128, epochs=1,
-          mode='length', file='poem',
-          len_min=10, len_max=50, one_hot=False)
