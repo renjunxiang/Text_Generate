@@ -13,8 +13,8 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 
 ## **模块简介**
 ### 模块结构
-结构很简单，包括：<br>
-* **数据**：全唐诗，来源<https://github.com/todototry/AncientChinesePoemsDB>，在此表示感谢！<br>
+结构很简单，方法在generate_text文件夹内，再给出keras诗歌、tensorflow诗歌+小说三个demo。但是keras因为效果不好，我后面封装的时候就没再去测试，可能有bug请海涵。generate_text文件夹包括：<br>
+* **数据**：全唐诗，来源<https://github.com/todototry/AncientChinesePoemsDB>；小说《射雕英雄传》，版权问题就不提供地址；在此表示感谢！<br>
 * **预处理**：data_poem.py是个脚本，用于合并、清洗每个txt文档；Data_process.py是个方法，用于分词、编码、填充<br>
 * **网络**：在文件夹rnn中，model_keras.py、model_tensorflow.py分别是keras、tensorflow的2层lstm<br>
 * **训练**：train_keras.py、train_tensorflow.py，分别用keras、tensorflow训练网络<br>
@@ -36,14 +36,14 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 
 ### 其他说明
 1.网上很多代码的做法是：每次输入一个字，输出lstm的hidden用于预测下一个字、state用于保存cell状态。下一个循环输入上一轮预测的字和state作为新一轮lsrm的cell初始状态。<br>
-我觉得太麻烦了，直接保留整个序列，[1] > [2]  |  [1,2] > [3]  |  [1,2,3] > [4]。因为tensorflow里面有一个output = tf.reshape(outputs, [-1,num_units])，输出的就是这句话后移一个单位预测值。<br>
+我觉得太麻烦了，直接保留整个序列，[1] > [2]  |  [1,2] > [2,3]  |  [1,2,3] > [2,3,4]。因为tensorflow里面有一个output = tf.reshape(outputs, [-1,num_units])，输出的就是这句话后移一个单位预测值。<br>
 <br>
 2.由于随机抽样很容易在标点生成的时候跳过标点，我一开始加入了修正：小于3个字符出现标点重新抽样直到字，多余7个字符不出现标点重新抽样直到标点。这里抽样也必须是最大概率的n个，而不是作弊的方式人为断句，这样的结果还是挺不错的，而且会出现4-7个字，比较有韵味，这段代码在generate_tensorflow_correct.py。<br>
 但是后面发现，在抽样的时候不用均匀，而是给每个字附上计算得到的概率，RNN完全可以学到标点的位置，结果更贴近唐诗5、7字，也同样丢失了4、6字的风格。<br>
 <br>
 3.训练的时候batchsize是大于1的，生成的时候batchsize=1，cell_mul.zero_state这里要注意。所以要保存训练的参数，生成的时候模型结构有改变，再导入训练参数。<br>
 <br>
-4.闲来无事想试着生成小说，一开始用的网络小说生成的很差，后来找了射雕英雄传有那么点感觉。
+4.闲来无事想试着生成小说，一开始用的网络小说生成的很差，后来找了射雕英雄传可能因为风格比较统一，有那么点感觉。
 
 ## 成果展示
 **train_keras.py、train_tensorflow.py进行训练，generate_keras.py、generate_tensorflow.py即可创作，参考demo_xxx.py**<br>
