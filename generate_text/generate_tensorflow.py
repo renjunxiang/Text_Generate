@@ -34,12 +34,11 @@ def generate_tensorflow(process_path=DIR + '/model/poem/poem.pkl',
                                batchsize=1)
     saver = tf.train.Saver(tf.global_variables())
     initializer = tf.global_variables_initializer()
-    while True:
-        with tf.Session() as sess:
-            sess.run(initializer)
-            checkpoint = tf.train.latest_checkpoint(model_path)
-            saver.restore(sess, checkpoint)
-
+    with tf.Session() as sess:
+        sess.run(initializer)
+        checkpoint = tf.train.latest_checkpoint(model_path)
+        saver.restore(sess, checkpoint)
+        while True:
             print('创作前请确保有模型。输入开头，quit=离开；\n请输入命令：')
 
             start_word = input()
