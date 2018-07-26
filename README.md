@@ -1,4 +1,4 @@
-# generate_text
+# Text_Generate
 [![](https://img.shields.io/badge/Python-3.5,3.6-blue.svg)](https://www.python.org/)
 [![](https://img.shields.io/badge/pandas-0.23.0-brightgreen.svg)](https://pypi.python.org/pypi/pandas/0.23.0)
 [![](https://img.shields.io/badge/numpy-1.14.3-brightgreen.svg)](https://pypi.python.org/pypi/numpy/1.14.3)
@@ -49,13 +49,13 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 **train_keras.py、train_tensorflow.py进行训练，generate_keras.py、generate_tensorflow.py即可创作，参考demo_xxx.py**<br>
 <br>
 **Tensorflow 诗歌 随机抽样+修正**<br>
-![](https://github.com/renjunxiang/generate_text/blob/master/picture/tensorflow_correct.jpg)<br><br>
+![](https://github.com/renjunxiang/Text_Generate/blob/master/picture/tensorflow_correct.jpg)<br><br>
 **Tensorflow 诗歌 概率抽样**<br>
-![](https://github.com/renjunxiang/generate_text/blob/master/picture/tensorflow.jpg)<br><br>
+![](https://github.com/renjunxiang/Text_Generate/blob/master/picture/tensorflow.jpg)<br><br>
 **Keras 诗歌 概率抽样**<br>
-![](https://github.com/renjunxiang/generate_text/blob/master/picture/keras.jpg)<br><br>
+![](https://github.com/renjunxiang/Text_Generate/blob/master/picture/keras.jpg)<br><br>
 **Tensorflow 小说 概率抽样**<br>
-![](https://github.com/renjunxiang/generate_text/blob/master/picture/story.jpg)<br><br>
+![](https://github.com/renjunxiang/Text_Generate/blob/master/picture/story.jpg)<br><br>
 
 **有几首不错的诗大家看着乐呵乐呵**<br>
 <br>
