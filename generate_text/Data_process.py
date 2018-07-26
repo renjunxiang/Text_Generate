@@ -9,7 +9,7 @@ import jieba
 
 jieba.setLogLevel('WARN')
 
-DIR = os.path.dirname(__file__)
+localpath = DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class Data_process():
