@@ -54,7 +54,7 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 ![](https://github.com/renjunxiang/Text_Generate/blob/master/picture/tensorflow_correct.jpg)<br><br>
 **Tensorflow 诗歌 概率抽样**<br>
 ![](https://github.com/renjunxiang/Text_Generate/blob/master/picture/tensorflow.jpg)<br><br>
-**Keras 诗歌 概率抽样**<br>
+**Keras 诗歌 概率抽样(这是之前的，更换损失函数以后效果和Tensorflow差不多)**<br>
 ![](https://github.com/renjunxiang/Text_Generate/blob/master/picture/keras.jpg)<br><br>
 **Tensorflow 小说 概率抽样**<br>
 ![](https://github.com/renjunxiang/Text_Generate/blob/master/picture/story.jpg)<br><br>
