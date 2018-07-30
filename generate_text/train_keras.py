@@ -27,20 +27,10 @@ def train_keras(maxlen=40,
                                                    len_max=len_max,
                                                    maxlen=maxlen,
                                                    one_hot=one_hot)
+    y = np.expand_dims(y, -1)
     with open(process_path, mode='wb') as f:
-        pickle.dump(word_index, f)
+        pickle.dump(data_process, f)
     model = model_keras(num_words=data_process.num_words, num_units=num_units)
     for epoch in range(epochs):
-        if one_hot:
-            model.fit(x=x, y=y, epochs=epochs, batch_size=batchsize, verbose=1)
-        else:
-            for batch in range(10):
-                index_all = np.arange(len(x))
-                index_batch = np.random.choice(index_all, batchsize)
-                x_batch = x[index_batch]
-                y_batch = y[index_batch]
-                y_batch = np.array([data_process.creat_one_hot(y_1, data_process.num_words) for y_1 in y_batch])
-                print('batch:', batch + 1)
-                model.fit(x=x_batch, y=y_batch, epochs=1, batch_size=batchsize, verbose=1)
+        model.fit(x=x, y=y, epochs=1, batch_size=batchsize, verbose=1)
         model.save(model_path)
-

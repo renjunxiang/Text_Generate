@@ -42,9 +42,14 @@ def model_tensorflow(input_data=None,
     # 训练的时候计算loss,target用独热编码;生成的时候只需要计算logits
     if batchsize > 1:
         with tf.name_scope('loss'):
-            labels = tf.one_hot(tf.reshape(output_targets, [-1]), depth=num_words)
-            # 每个词语的loss,shape=[?, num_words]
-            loss = tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits)
+            # labels = tf.one_hot(tf.reshape(output_targets, [-1]), depth=num_words)
+            # # 每个词语的loss,shape=[?, num_words]
+            # loss = tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits)
+            # total_loss = tf.reduce_mean(loss)
+
+            #和上面等价，感觉好像这个的训练快一些？
+            labels = tf.reshape(output_targets, [-1])
+            loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels, logits=logits)
             total_loss = tf.reduce_mean(loss)
 
         train_op = tf.train.AdamOptimizer(learning_rate=0.01).minimize(loss)

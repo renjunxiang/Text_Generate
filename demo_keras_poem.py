@@ -5,7 +5,7 @@ DIR = os.path.dirname(os.path.abspath(__file__))
 
 train_keras(maxlen=40,
             batchsize=64,
-            num_words=3000,
+            num_words=5000,
             num_units=128,
             epochs=1,
             mode='length',

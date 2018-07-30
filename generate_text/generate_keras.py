@@ -25,6 +25,9 @@ def generate_keras(process_path='./model/poem/data_process.pkl',
         print('中文作诗，作诗前请确保有模型。输入开头，quit=离开；\n请输入命令：')
 
         start_word = input()
+        if start_word == 'quit':
+            print('\n再见！')
+            break
 
         if start_word == '':
             words = list(word_index.keys())
