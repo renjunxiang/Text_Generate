@@ -13,7 +13,7 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 
 ## **模块简介**
 ### 模块结构
-结构很简单，方法在generate_text文件夹内，再给出keras诗歌、tensorflow诗歌+小说三个demo。~~但是keras因为效果不好，我后面封装的时候就没再去测试，可能有bug请海涵。~~generate_text文件夹包括：<br>
+结构很简单，方法在generate_text文件夹内，再给出keras诗歌、tensorflow诗歌+小说三个demo。~~但是keras因为效果不好，我后面封装的时候就没再去测试，可能有bug请海涵。~~ generate_text文件夹包括：<br>
 * **数据**：全唐诗，来源<https://github.com/todototry/AncientChinesePoemsDB>；小说《射雕英雄传》，版权问题就不提供地址；在此表示感谢！<br>
 * **预处理**：data_poem.py是个脚本，用于合并、清洗每个txt文档；Data_process.py是个方法，用于分词、编码、填充<br>
 * **网络**：在文件夹rnn中，model_keras.py、model_tensorflow.py分别是keras、tensorflow的2层lstm<br>
@@ -26,6 +26,7 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 ~~2.同样的网络，keras训练效果不是特别好、loss在5以上，tensorflow的loss能降到1左右，不知道是不是因为没有对x和y做reshape拼接的原因。~~<br>
 <br>
 1+2.学艺不精，发现keras原来也有sparse_categorical_crossentropy，解决了内存问题。但是内部好像不支持对y做reshape，所以输出是嵌套结构的，不知道是不是这个原因loss到4.5以后就下降的很慢。<br>
+~~
 3.固定的网络输出是固定的。<br>
 <br>
 4.断句很难控制在5或者7。<br>
