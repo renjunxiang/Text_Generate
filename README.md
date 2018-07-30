@@ -20,19 +20,18 @@ tensorflow的代码参考了github一个比较火的项目<https://github.com/ji
 * **训练**：train_keras.py、train_tensorflow.py，分别用keras、tensorflow训练网络<br>
 * **生成**：generate_keras.py、generate_tensorflow.py，分别用keras、tensorflow生成诗歌<br>
 
-### 写诗遇到的问题
-~~1.keras貌似不能对标签数据在网络内部做one-hot，所以标签会非常占内存，我用服务器96G内存都吃不消30000首诗5000长度字典的生成。~~<br>
+### 遇到的问题
+1.keras貌似不能对标签数据在网络内部做one-hot，所以标签会非常占内存，我用服务器96G内存都吃不消30000首诗5000长度字典的生成。<br>
 <br>
-~~2.同样的网络，keras训练效果不是特别好、loss在5以上，tensorflow的loss能降到1左右，不知道是不是因为没有对x和y做reshape拼接的原因。~~<br>
-<br>
-1+2.学艺不精，发现keras原来也有sparse_categorical_crossentropy，解决了内存问题。但是内部好像不支持对y做reshape，所以输出是嵌套结构的，不知道是不是这个原因loss到4.5以后就下降的很慢。<br>
+2.同样的网络，keras训练效果不是特别好、loss在5以上，tensorflow的loss能降到1左右，不知道是不是因为没有对x和y做reshape拼接的原因。<br>
 <br>
 3.固定的网络输出是固定的。<br>
 <br>
 4.断句很难控制在5或者7。<br>
 
 ### 解决方案
-1.keras我加入了分批训练时外部执行one-hot，但会大幅增加训练时间。<br>
+~~1.keras我加入了分批训练时外部执行one-hot，但会大幅增加训练时间。~~<br>
+1.学艺不精，发现keras原来也有sparse_categorical_crossentropy，解决了内存问题。但是内部好像不支持对y做reshape，所以输出是嵌套结构的，不知道是不是这个原因loss到4.5以后就下降的很慢。<br>
 <br>
 2.在预测的时候不取唯一解，而是取最大概率的n个答案，或者对生成的结果做不同概率的抽样。<br>
 
